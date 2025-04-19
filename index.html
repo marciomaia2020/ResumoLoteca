@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados Loteca</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid #0066B3;
+        }
+
+        .header h1 {
+            color: #0066B3;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        .concurso-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #0066B3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .card-header h2 {
+            font-size: 1.6em;
+            margin-bottom: 5px;
+        }
+
+        .concurso-numero {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .concurso-data {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .jogos-container {
+            padding: 20px;
+        }
+
+        .jogos-titulo {
+            background-color: #f0f7ff;
+            color: #0066B3;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            border-left: 4px solid #0066B3;
+        }
+
+        .jogos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 15px;
+        }
+
+        .jogo-item {
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .jogo-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .jogo-header {
+            background-color: #0066B3;
+            color: white;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .jogo-numero {
+            background-color: white;
+            color: #0066B3;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+
+        .jogo-data {
+            font-size: 0.85em;
+        }
+
+        .jogo-conteudo {
+            padding: 15px;
+        }
+
+        .time-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .time-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 45%;
+        }
+
+        .time-casa {
+            text-align: right;
+        }
+
+        .time-visitante {
+            text-align: left;
+        }
+
+        .time-nome {
+            font-weight: bold;
+            font-size: 1em;
+            line-height: 1.3;
+        }
+
+        .time-local {
+            font-size: 0.75em;
+            color: #777;
+        }
+
+        .placar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f8ff;
+            border-radius: 6px;
+            padding: 8px;
+            min-width: 90px;
+        }
+
+        .placar {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #0066B3;
+        }
+
+        .gol-casa, .gol-visitante {
+            padding: 0 10px;
+        }
+
+        .placar-divisor {
+            margin: 0 5px;
+            color: #888;
+        }
+
+        .resultado-indicador {
+            background-color: #e6f2ff;
+            border-radius: 4px;
+            padding: 8px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .resultado-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 10px;
+        }
+        
+        .resultado-label {
+            font-size: 0.7em;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .resultado-marcador {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            border: 2px solid #ddd;
+            color: #777;
+        }
+
+        .resultado-marcador.selecionado {
+            background-color: #0066B3;
+            color: white;
+            border-color: #0066B3;
+        }
+
+        .premiacoes-container {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .premiacoes-titulo {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: #0066B3;
+            font-weight: bold;
+        }
+
+        .premiacoes-status {
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .acumulou-texto {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #E80000;
+            margin-bottom: 5px;
+        }
+
+        .acumulou-valor {
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .premio-tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .premio-tabela th, .premio-tabela td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .premio-tabela tr:last-child td {
+            border-bottom: none;
+        }
+
+        .premio-tabela th {
+            background-color: #0066B3;
+            color: white;
+            font-weight: normal;
+        }
+
+        .premio-tabela tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .acertos-cell {
+            font-weight: bold;
+        }
+
+        .ganhadores-cell {
+            text-align: center;
+        }
+
+        .valor-cell {
+            text-align: right;
+            font-weight: bold;
+            color: #0066B3;
+        }
+
+        .valor-acumulado {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .acumulado-item {
+            background-color: #e6f2ff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .acumulado-item p:first-child {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .acumulado-item p:last-child {
+            font-weight: bold;
+            color: #0066B3;
+            font-size: 1.1em;
+        }
+
+        .proximo-concurso {
+            margin-top: 20px;
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .proximo-concurso-titulo {
+            font-weight: bold;
+            color: #0066B3;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .proximo-concurso-dados {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .proximo-concurso-valor {
+            font-weight: bold;
+            color: #0066B3;
+            font-size: 1.3em;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 30px 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            background-color: #fff0f0;
+            border: 1px solid #ffcaca;
+            border-radius: 8px;
+            color: #d00;
+        }
+
+        .error-message h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .error-message button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #0066B3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .error-message button:hover {
+            background-color: #00508A;
+        }
+
+        /* Estilos para loader */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #e0e0e0;
+            border-top: 5px solid #0066B3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: #0066B3;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notificações */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: white;
+            font-weight: bold;
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            max-width: 350px;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            background-color: #2ecc71;
+        }
+
+        .notification.error {
+            background-color: #e74c3c;
+        }
+
+        .notification.info {
+            background-color: #3498db;
+        }
+
+        /* Navegação */
+        .concursos-navegacao {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 15px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            background-color: #0066B3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover {
+            background-color: #005399;
+        }
+
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .nav-button i {
+            font-size: 0.9em;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .jogos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .valor-acumulado {
+                grid-template-columns: 1fr;
+            }
+            
+            .time-nome {
+                font-size: 0.95em;
+            }
+            
+            .placar {
+                font-size: 1.2em;
+            }
+
+            .resultado-indicador {
+                padding: 6px;
+            }
+            
+            .resultado-item {
+                padding: 0 5px;
+            }
+            
+            .resultado-marcador {
+                width: 26px;
+                height: 26px;
+                font-size: 0.8em;
+            }
+
+            .acumulou-texto {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Modo escuro */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #e0e0e0;
+            }
+            
+            .concurso-card {
+                background: #2a2a2a;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            }
+            
+            .card-header {
+                background-color: #005399;
+            }
+            
+            .jogos-titulo {
+                background-color: #1c2e45;
+                border-left: 4px solid #0077cc;
+            }
+            
+            .jogo-item {
+                border: 1px solid #333;
+                background-color: #2a2a2a;
+            }
+            
+            .jogo-header {
+                background-color: #005399;
+            }
+            
+            .time-local {
+                color: #999;
+            }
+            
+            .placar-container {
+                background-color: #222d40;
+            }
+            
+            .placar {
+                color: #4aa3ff;
+            }
+            
+            .resultado-indicador {
+                background-color: #1c2e45;
+            }
+            
+            .resultado-label {
+                color: #aaa;
+            }
+            
+            .resultado-marcador {
+                border: 2px solid #444;
+                color: #bbb;
+            }
+            
+            .resultado-marcador.selecionado {
+                background-color: #0077cc;
+                border-color: #0077cc;
+            }
+            
+            .premiacoes-status {
+                background-color: #2a2a2a;
+            }
+            
+            .premio-tabela th {
+                background-color: #005399;
+            }
+            
+            .premio-tabela tr:nth-child(even) {
+                background-color: #333;
+            }
+            
+            .premio-tabela td {
+                border-bottom: 1px solid #444;
+            }
+            
+            .acumulado-item {
+                background-color: #1c2e45;
+            }
+            
+            .acumulado-item p:first-child {
+                color: #ccc;
+            }
+            
+            .acumulado-item p:last-child {
+                color: #4aa3ff;
+            }
+            
+            .proximo-concurso {
+                background-color: #1c2e45;
+            }
+            
+            .proximo-concurso-titulo, .proximo-concurso-valor {
+                color: #4aa3ff;
+            }
+            
+            .proximo-concurso-dados {
+                color: #ddd;
+            }
+            
+            .error-message {
+                background-color: #3a1a1a;
+                border: 1px solid #562c2c;
+                color: #ff6b6b;
+            }
+            
+            .loading-overlay {
+                background-color: rgba(26, 26, 26, 0.9);
+            }
+            
+            .loading-spinner {
+                border: 5px solid #333;
+                border-top: 5px solid #0077cc;
+            }
+            
+            .loading-text {
+                color: #4aa3ff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Resultados da Loteca</h1>
+            <p>Confira os resultados dos jogos e premiações</p>
+        </div>
+        
+        <div id="resultados-container">
+            <!-- Os resultados serão carregados via JavaScript -->
+            <div class="concurso-card">
+                <div class="card-header">
+                    <h2>Carregando dados...</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="concursos-navegacao">
+            <button id="anterior-btn" class="nav-button" disabled>
+                <i class="fas fa-chevron-left"></i> Concursos Anteriores
+            </button>
+            <button id="proximo-btn" class="nav-button" disabled>
+                Concursos Recentes <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configurações das APIs
+        const API_CONFIG = {
+            // APIs oficiais
+            CAIXA_URL: 'https://servicebus2.caixa.gov.br/portaldeloterias/api/loteca',
+            HEROKU_URL: 'https://loteriascaixa-api.herokuapp.com/api/loteca',
+            
+            // Serviços de proxy CORS
+            CORS_PROXY_URLS: [
+                'https://corsproxy.io/?',
+                'https://api.allorigins.win/raw?url=',
+                'https://cors-anywhere.herokuapp.com/'
+            ]
+        };
+
+        // Variáveis de controle
+        let ultimoConcursoCarregado = null;
+        let concursosExibidos = [];
+        let concursosPorPagina = 2; // Reduzido para 2 devido ao layout mais detalhado
+        let paginaAtual = 1;
+        let totalConcursos = 0;
+        let loadingTimeout = null;
+        
+        // DOM Elements
+        const resultadosContainer = document.getElementById('resultados-container');
+        const anteriorBtn = document.getElementById('anterior-btn');
+        const proximoBtn = document.getElementById('proximo-btn');
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarUltimosConcursos();
+            
+            // Event listeners para paginação
+            anteriorBtn.addEventListener('click', carregarConcursosAnteriores);
+            proximoBtn.addEventListener('click', carregarProximosConcursos);
+        });
+
+        // Função para formatar valores monetários
+        function formatarMoeda(valor) {
+            if (!valor && valor !== 0) return 'R$ 0,00';
+            
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(valor);
+        }
+
+        // Função para formatar data
+        function formatarData(dataStr) {
+            if (!dataStr) return '';
+            
+            try {
+                // Verifica se a data já está no formato brasileiro (dd/mm/aaaa)
+                if (/^\d{2}\/\d{2}\/\d{4}$/.test(dataStr)) {
+                    return dataStr;
+                }
+                
+                // Se a data estiver no formato ISO (aaaa-mm-dd)
+                const data = new Date(dataStr);
+                return data.toLocaleDateString('pt-BR');
+            } catch (error) {
+                console.error('Erro ao formatar data:', error);
+                return dataStr;
+            }
+        }
+
+        // Função para obter o nome do dia da semana
+        function obterDiaSemana(dataStr) {
+            if (!dataStr) return '';
+            
+            try {
+                // Parse da data no formato brasileiro
+                const partes = dataStr.split('/');
+                if (partes.length !== 3) return '';
+                
+                const data = new Date(partes[2], partes[1] - 1, partes[0]);
+                const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+                return diasSemana[data.getDay()];
+            } catch (error) {
+                console.error('Erro ao obter dia da semana:', error);
+                return '';
+            }
+        }
+
+        // Função para tentar carregar dados da API com fallbacks
+        async function carregarDadosAPI(url, usarProxy = false) {
+            try {
+                if (usarProxy) {
+                    // Tenta cada um dos proxies em sequência
+                    for (const proxyUrl of API_CONFIG.CORS_PROXY_URLS) {
+                        try {
+                            console.log(`Tentando carregar com proxy ${proxyUrl}${url}`);
+                            const response = await fetch(proxyUrl + encodeURIComponent(url), {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/json'
+                                },
+                                mode: 'cors'
+                            });
+                            
+                            if (response.ok) {
+                                const data = await response.json();
+                                console.log('Dados obtidos com sucesso:', data);
+                                return data;
+                            } else {
+                                console.warn(`Resposta de erro do proxy ${proxyUrl}: ${response.status}`);
+                            }
+                        } catch (error) {
+                            console.warn(`Erro ao usar proxy ${proxyUrl}:`, error);
+                            // Continua para o próximo proxy
+                        }
+                    }
+                    throw new Error('Todos os proxies falharam');
+                } else {
+                    console.log(`Tentando carregar diretamente: ${url}`);
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Dados obtidos com sucesso:', data);
+                        return data;
+                    } else {
+                        throw new Error(`Status: ${response.status}`);
+                    }
+                }
+            } catch (error) {
+                console.error(`Erro ao carregar dados de ${url}:`, error);
+                throw error;
+            }
+        }
+
+        // Carregar dados com fallbacks para múltiplas APIs
+        async function carregarConcurso(numero = null) {
+            showLoading('Carregando dados da Loteca...');
+            
+            try {
+                // Define um timeout para caso todas as requisições demorem muito
+                const timeoutPromise = new Promise((_, reject) => {
+                    loadingTimeout = setTimeout(() => {
+                        reject(new Error('Timeout - A requisição demorou muito tempo'));
+                    }, 15000); // 15 segundos de timeout
+                });
+                
+                // Tenta primeiro a API Heroku
+                try {
+                    const url = numero 
+                        ? `${API_CONFIG.HEROKU_URL}/${numero}`
+                        : `${API_CONFIG.HEROKU_URL}/latest`;
+                    
+                    console.log(`Tentando API Heroku: ${url}`);
+                    const dados = await Promise.race([
+                        carregarDadosAPI(url),
+                        timeoutPromise
+                    ]);
+                    clearTimeout(loadingTimeout);
+                    hideLoading();
+                    return processarDadosHeroku(dados);
+                } catch (error) {
+                    console.warn('API Heroku falhou, tentando API Caixa com proxy...', error);
+                    
+                    // Tenta a API oficial da Caixa com proxy como última opção
+                    try {
+                        const url = numero 
+                            ? `${API_CONFIG.CAIXA_URL}/${numero}`
+                            : API_CONFIG.CAIXA_URL;
+                        
+                        console.log(`Tentando API Caixa com proxy: ${url}`);
+                        const dados = await Promise.race([
+                            carregarDadosAPI(url, true),
+                            timeoutPromise
+                        ]);
+                        clearTimeout(loadingTimeout);
+                        hideLoading();
+                        return processarDadosCaixa(dados);
+                    } catch (error2) {
+                        clearTimeout(loadingTimeout);
+                        console.error('Todas as APIs falharam', error2);
+                        throw new Error('Não foi possível obter dados de nenhuma API');
+                    }
+                }
+            } catch (error) {
+                clearTimeout(loadingTimeout);
+                hideLoading();
+                console.error('Erro ao carregar concurso:', error);
+                showNotification('Não foi possível carregar os dados. Usando dados de exemplo...', 'error');
+                return carregarConcursoEmergencia(numero);
+            }
+        }
+
+        // Processadores para cada formato de API
+        function processarDadosHeroku(dados) {
+            console.log("Processando dados da API Heroku:", dados);
+            
+            if (!dados) {
+                throw new Error('Dados da API Heroku inválidos');
+            }
+            
+            // Extrai as premiações para um formato mais fácil de usar
+            const premiacoes = {};
+            if (dados.premiacoes && Array.isArray(dados.premiacoes)) {
+                dados.premiacoes.forEach(premio => {
+                    const descricao = premio.descricao || premio.descricaoFaixa;
+                    premiacoes[descricao] = {
+                        ganhadores: premio.ganhadores || premio.numeroDeGanhadores || 0,
+                        valorPremio: premio.valorPremio || 0
+                    };
+                });
+            } else if (dados.listaRateioPremio && Array.isArray(dados.listaRateioPremio)) {
+                dados.listaRateioPremio.forEach(premio => {
+                    const descricao = premio.descricaoFaixa || premio.descricao;
+                    premiacoes[descricao] = {
+                        ganhadores: premio.numeroDeGanhadores || premio.ganhadores || 0,
+                        valorPremio: premio.valorPremio || 0
+                    };
+                });
+            }
+            
+            // Extrai a lista de municípios ganhadores
+            const municipiosGanhadores = [];
+            if (dados.listaMunicipioUFGanhadores && Array.isArray(dados.listaMunicipioUFGanhadores)) {
+                dados.listaMunicipioUFGanhadores.forEach(cidade => {
+                    municipiosGanhadores.push({
+                        municipio: cidade.municipio || "",
+                        uf: cidade.uf || "",
+                        ganhadores: cidade.ganhadores || 0
+                    });
+                });
+            } else if (dados.ganhadores && Array.isArray(dados.ganhadores)) {
+                dados.ganhadores.forEach(cidade => {
+                    municipiosGanhadores.push({
+                        municipio: cidade.cidade || cidade.municipio || "",
+                        uf: cidade.uf || "",
+                        ganhadores: cidade.quantidade || cidade.ganhadores || 0
+                    });
+                });
+            }
+            
+            // Processamento dos jogos
+            const jogos = [];
+            
+            if (dados.listaResultadoEquipeEsportiva && Array.isArray(dados.listaResultadoEquipeEsportiva)) {
+                dados.listaResultadoEquipeEsportiva.forEach(jogo => {
+                    jogos.push({
+                        sequencial: jogo.nuSequencial || jogo.sequencial || 0,
+                        timeCasa: {
+                            nome: jogo.nomeEquipeUm || jogo.timeCasa || "",
+                            uf: jogo.siglaUFUm || jogo.ufTimeCasa || "",
+                            pais: jogo.siglaPaisUm || jogo.paisTimeCasa || ""
+                        },
+                        timeVisitante: {
+                            nome: jogo.nomeEquipeDois || jogo.timeVisitante || "",
+                            uf: jogo.siglaUFDois || jogo.ufTimeVisitante || "",
+                            pais: jogo.siglaPaisDois || jogo.paisTimeVisitante || ""
+                        },
+                        placar: {
+                            casa: jogo.nuGolEquipeUm !== undefined ? jogo.nuGolEquipeUm : (jogo.golsCasa !== undefined ? jogo.golsCasa : null),
+                            visitante: jogo.nuGolEquipeDois !== undefined ? jogo.nuGolEquipeDois : (jogo.golsVisitante !== undefined ? jogo.golsVisitante : null)
+                        },
+                        data: jogo.dtJogo || jogo.dataJogo || "",
+                        diaSemana: jogo.diaSemana || ""
+                    });
+                });
+                
+                // Ordena os jogos por número sequencial
+                jogos.sort((a, b) => a.sequencial - b.sequencial);
+            }
+            
+            const numero = dados.concurso || dados.numero || 0;
+            const dataApuracao = dados.data || dados.dataApuracao || dados.dataSorteio || '';
+            const dataFormatada = formatarData(dataApuracao);
+            
+            // Verifica se o concurso acumulou (0 ganhadores na primeira faixa)
+            const acumulou = premiacoes['1º (14 acertos)']?.ganhadores === 0;
+            
+            return {
+                numero: numero,
+                data: dataFormatada,
+                diaSemana: obterDiaSemana(dataFormatada),
+                jogos: jogos,
+                acumulou: acumulou,
+                localSorteio: dados.local || dados.localSorteio || 'Local não informado',
+                premiacoes: {
+                    quatorzeAcertos: {
+                        ganhadores: premiacoes['1º (14 acertos)']?.ganhadores || 0,
+                        valorPremio: premiacoes['1º (14 acertos)']?.valorPremio || 0
+                    },
+                    trezeAcertos: {
+                        ganhadores: premiacoes['2º (13 acertos)']?.ganhadores || 0,
+                        valorPremio: premiacoes['2º (13 acertos)']?.valorPremio || 0
+                    }
+                },
+                municipiosGanhadores: municipiosGanhadores,
+                valorArrecadado: dados.valorArrecadado || 0,
+                valorAcumuladoConcursoEspecial: dados.valorAcumuladoConcursoEspecial || 0,
+                valorAcumuladoProximoConcurso: dados.valorAcumuladoProximoConcurso || 0,
+                proximoConcurso: {
+                    data: formatarData(dados.dataProximoConcurso),
+                    diaSemana: obterDiaSemana(formatarData(dados.dataProximoConcurso)),
+                    numero: dados.proximoConcurso || dados.numeroConcursoProximo || (parseInt(numero, 10) + 1),
+                    estimativaPremio: dados.valorEstimadoProximoConcurso || 0
+                }
+            };
+        }
+
+        function processarDadosCaixa(dados) {
+            console.log("Processando dados da API Caixa:", dados);
+            
+            if (!dados) {
+                throw new Error('Dados da API Caixa inválidos');
+            }
+            
+            // Extrair premiações
+            const premiacoes = {
+                quatorzeAcertos: { ganhadores: 0, valorPremio: 0 },
+                trezeAcertos: { ganhadores: 0, valorPremio: 0 }
+            };
+            
+            if (dados.listaRateioPremio && Array.isArray(dados.listaRateioPremio)) {
+                dados.listaRateioPremio.forEach(premio => {
+                    if (premio.descricaoFaixa === "1º (14 acertos)" || premio.faixa === 1) {
+                        premiacoes.quatorzeAcertos = {
+                            ganhadores: parseInt(premio.numeroDeGanhadores || 0),
+                            valorPremio: parseFloat(premio.valorPremio || 0)
+                        };
+                    } else if (premio.descricaoFaixa === "2º (13 acertos)" || premio.faixa === 2) {
+                        premiacoes.trezeAcertos = {
+                            ganhadores: parseInt(premio.numeroDeGanhadores || 0),
+                            valorPremio: parseFloat(premio.valorPremio || 0)
+                        };
+                    }
+                });
+            }
+            
+            // Extrair municípios ganhadores
+            const municipiosGanhadores = [];
+            if (dados.listaMunicipioUFGanhadores && Array.isArray(dados.listaMunicipioUFGanhadores)) {
+                dados.listaMunicipioUFGanhadores.forEach(cidade => {
+                    municipiosGanhadores.push({
+                        municipio: cidade.municipio || "",
+                        uf: cidade.uf || "",
+                        ganhadores: cidade.ganhadores || 0
+                    });
+                });
+            }
+            
+            // Processamento dos jogos
+            const jogos = [];
+            
+            if (dados.listaResultadoEquipeEsportiva && Array.isArray(dados.listaResultadoEquipeEsportiva)) {
+                dados.listaResultadoEquipeEsportiva.forEach(jogo => {
+                    jogos.push({
+                        sequencial: jogo.nuSequencial || jogo.sequencial || 0,
+                        timeCasa: {
+                            nome: jogo.nomeEquipeUm || jogo.timeCasa || "",
+                            uf: jogo.siglaUFUm || jogo.ufTimeCasa || "",
+                            pais: jogo.siglaPaisUm || jogo.paisTimeCasa || ""
+                        },
+                        timeVisitante: {
+                            nome: jogo.nomeEquipeDois || jogo.timeVisitante || "",
+                            uf: jogo.siglaUFDois || jogo.ufTimeVisitante || "",
+                            pais: jogo.siglaPaisDois || jogo.paisTimeVisitante || ""
+                        },
+                        placar: {
+                            casa: jogo.nuGolEquipeUm !== undefined ? jogo.nuGolEquipeUm : (jogo.golsCasa !== undefined ? jogo.golsCasa : null),
+                            visitante: jogo.nuGolEquipeDois !== undefined ? jogo.nuGolEquipeDois : (jogo.golsVisitante !== undefined ? jogo.golsVisitante : null)
+                        },
+                        data: jogo.dtJogo || jogo.dataJogo || "",
+                        diaSemana: jogo.diaSemana || ""
+                    });
+                });
+                
+                // Ordena os jogos por número sequencial
+                jogos.sort((a, b) => a.sequencial - b.sequencial);
+            }
+            
+            const dataFormatada = formatarData(dados.dataApuracao);
+            
+            // A API da Caixa tem um formato próprio, adaptamos para o nosso padrão
+            return {
+                numero: dados.numero || 0,
+                data: dataFormatada,
+                diaSemana: obterDiaSemana(dataFormatada),
+                jogos: jogos,
+                acumulou: dados.acumulado || premiacoes.quatorzeAcertos.ganhadores === 0,
+                localSorteio: dados.localSorteio || 'Local não informado',
+                premiacoes: premiacoes,
+                municipiosGanhadores: municipiosGanhadores,
+                valorArrecadado: dados.valorArrecadado || 0,
+                valorAcumuladoConcursoEspecial: dados.valorAcumuladoConcursoEspecial || 0,
+                valorAcumuladoProximoConcurso: dados.valorAcumuladoProximoConcurso || 0,
+                proximoConcurso: {
+                    data: formatarData(dados.dataProximoConcurso),
+                    diaSemana: obterDiaSemana(formatarData(dados.dataProximoConcurso)),
+                    numero: dados.numeroConcursoProximo || parseInt(dados.numero || '0', 10) + 1,
+                    estimativaPremio: dados.valorEstimadoProximoConcurso || 0
+                }
+            };
+        }
+
+        // Função para carregar os últimos concursos
+        async function carregarUltimosConcursos() {
+            try {
+                showLoading('Carregando últimos concursos...');
+                
+                // Carregar o concurso mais recente
+                let ultimoConcurso;
+                try {
+                    ultimoConcurso = await carregarConcurso();
+                    ultimoConcursoCarregado = ultimoConcurso.numero;
+                    totalConcursos = ultimoConcurso.numero;
+                } catch (error) {
+                    console.error('Erro ao carregar o último concurso:', error);
+                    mostrarErro('Não foi possível carregar o último concurso. Por favor, tente novamente.');
+                    hideLoading();
+                    return;
+                }
+                
+                console.log(`Último concurso carregado: ${ultimoConcursoCarregado}`);
+                
+                // Calcular quais concursos devem ser carregados
+                const concursosNecessarios = [];
+                for (let i = 0; i < concursosPorPagina; i++) {
+                    if (ultimoConcursoCarregado - i > 0) {
+                        concursosNecessarios.push(ultimoConcursoCarregado - i);
+                    }
+                }
+                
+                if (concursosNecessarios.length === 0) {
+                    console.error('Nenhum concurso válido para carregar');
+                    mostrarErro('Não há concursos disponíveis para exibição.');
+                    hideLoading();
+                    return;
+                }
+                
+                console.log('Concursos a serem carregados:', concursosNecessarios);
+                
+                // Atualizar mensagem de carregamento
+                showLoading('Carregando dados dos concursos...');
+                
+                // Carrega os concursos um por um para evitar sobrecarga
+                concursosExibidos = [];
+                for (const num of concursosNecessarios) {
+                    try {
+                        const concurso = await carregarConcurso(num);
+                        concursosExibidos.push(concurso);
+                        // Exibe os concursos já carregados enquanto os outros estão sendo obtidos
+                        if (concursosExibidos.length > 0) {
+                            exibirConcursos(concursosExibidos);
+                        }
+                    } catch (e) {
+                        console.error(`Erro ao carregar concurso ${num}:`, e);
+                        // Continue tentando carregar os outros concursos
+                    }
+                }
+                
+                if (concursosExibidos.length === 0) {
+                    console.error('Nenhum concurso foi carregado com sucesso');
+                    mostrarErro('Não foi possível carregar nenhum concurso. Por favor, tente novamente.');
+                    hideLoading();
+                    return;
+                }
+                
+                // Exibir os concursos
+                exibirConcursos(concursosExibidos);
+                
+                // Atualizar botões de paginação
+                atualizarBotoesPaginacao();
+                
+            } catch (error) {
+                console.error('Erro ao carregar últimos concursos:', error);
+                showNotification('Erro ao carregar concursos. Tentando dados de exemplo...', 'error');
+                
+                // Tentar novamente com abordagem alternativa
+                concursosExibidos = [];
+                for (let i = 0; i < concursosPorPagina; i++) {
+                    try {
+                        const concurso = await carregarConcursoEmergencia(1180 - i); // Um número recente da Loteca
+                        if (concurso) concursosExibidos.push(concurso);
+                    } catch (e) {
+                        console.error('Falha na tentativa de emergência:', e);
+                    }
+                }
+                
+                if (concursosExibidos.length === 0) {
+                    mostrarErro('Não foi possível carregar nenhum concurso. Por favor, recarregue a página e tente novamente.');
+                } else {
+                    exibirConcursos(concursosExibidos);
+                    atualizarBotoesPaginacao();
+                }
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Função para mostrar mensagem de erro
+        function mostrarErro(mensagem) {
+            resultadosContainer.innerHTML = `
+                <div class="error-message">
+                    <h3>Erro</h3>
+                    <p>${mensagem}</p>
+                    <button onclick="window.location.reload()">Tentar novamente</button>
+                </div>
+            `;
+        }
+
+        // Carregar concursos anteriores
+        async function carregarConcursosAnteriores() {
+            try {
+                showLoading('Carregando concursos anteriores...');
+                
+                // Obter o número do concurso mais antigo exibido atualmente
+                const concursoMaisAntigo = Math.min(...concursosExibidos.map(c => c.numero));
+                
+                // Calcular quais concursos devem ser carregados
+                const concursosNecessarios = [];
+                for (let i = 1; i <= concursosPorPagina; i++) {
+                    if (concursoMaisAntigo - i > 0) {
+                        concursosNecessarios.push(concursoMaisAntigo - i);
+                    }
+                }
+                
+                if (concursosNecessarios.length === 0) {
+                    console.log('Não há concursos anteriores para carregar');
+                    showNotification('Não há concursos anteriores disponíveis', 'info');
+                    hideLoading();
+                    return;
+                }
+                
+                // Carrega os concursos um por um para evitar sobrecarga
+                const novosExibidos = [];
+                for (const num of concursosNecessarios) {
+                    try {
+                        const concurso = await carregarConcurso(num);
+                        novosExibidos.push(concurso);
+                    } catch (e) {
+                        console.error(`Erro ao carregar concurso ${num}:`, e);
+                        // Continue tentando carregar os outros concursos
+                    }
+                }
+                
+                if (novosExibidos.length === 0) {
+                    showNotification('Não foi possível carregar concursos anteriores', 'error');
+                    hideLoading();
+                    return;
+                }
+                
+                concursosExibidos = novosExibidos;
+                
+                // Exibir os concursos
+                exibirConcursos(concursosExibidos);
+                
+                paginaAtual++;
+                atualizarBotoesPaginacao();
+                
+            } catch (error) {
+                console.error('Erro ao carregar concursos anteriores:', error);
+                showNotification('Erro ao carregar concursos anteriores', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar próximos concursos (mais recentes)
+        async function carregarProximosConcursos() {
+            try {
+                showLoading('Carregando concursos mais recentes...');
+                
+                // Obter o número do concurso mais recente exibido atualmente
+                const concursoMaisRecente = Math.max(...concursosExibidos.map(c => c.numero));
+                
+                // Calcular quais concursos devem ser carregados
+                const concursosNecessarios = [];
+                for (let i = 1; i <= concursosPorPagina; i++) {
+                    // Não carregamos concursos futuros
+                    const numConcurso = concursoMaisRecente + i;
+                    if (numConcurso <= ultimoConcursoCarregado) {
+                        concursosNecessarios.push(numConcurso);
+                    }
+                }
+                
+                // Se não houver concursos a carregar, recarregamos os mais recentes
+                if (concursosNecessarios.length === 0) {
+                    console.log('Voltando para os concursos mais recentes');
+                    await carregarUltimosConcursos();
+                    return;
+                }
+                
+                // Carrega os concursos um por um para evitar sobrecarga
+                const novosExibidos = [];
+                for (const num of concursosNecessarios) {
+                    try {
+                        const concurso = await carregarConcurso(num);
+                        novosExibidos.push(concurso);
+                    } catch (e) {
+                        console.error(`Erro ao carregar concurso ${num}:`, e);
+                        // Continue tentando carregar os outros concursos
+                    }
+                }
+                
+                if (novosExibidos.length === 0) {
+                    showNotification('Não foi possível carregar os próximos concursos', 'error');
+                    hideLoading();
+                    return;
+                }
+                
+                concursosExibidos = novosExibidos;
+                
+                // Exibir os concursos
+                exibirConcursos(concursosExibidos);
+                
+                paginaAtual--;
+                atualizarBotoesPaginacao();
+                
+            } catch (error) {
+                console.error('Erro ao carregar próximos concursos:', error);
+                showNotification('Erro ao carregar próximos concursos', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Exibir concursos na interface
+        function exibirConcursos(concursos) {
+            // Limpar o container
+            resultadosContainer.innerHTML = '';
+            
+            if (!concursos || concursos.length === 0) {
+                resultadosContainer.innerHTML = `
+                    <div class="error-message">
+                        <h3>Sem dados</h3>
+                        <p>Não há concursos disponíveis para exibição.</p>
+                        <button onclick="window.location.reload()">Tentar novamente</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Ordenar concursos do mais recente para o mais antigo
+            concursos.sort((a, b) => b.numero - a.numero);
+            
+            // Exibir cada concurso
+            concursos.forEach(concurso => {
+                const card = document.createElement('div');
+                card.className = 'concurso-card';
+                
+                // Montar os jogos
+                let jogosHTML = '';
+                
+                if (concurso.jogos && concurso.jogos.length > 0) {
+                    const jogosElements = concurso.jogos.map(jogo => {
+                        // Determinar resultado (1, X, 2)
+                        let resultado = null;
+                        
+                        if (jogo.placar.casa !== null && jogo.placar.visitante !== null) {
+                            if (jogo.placar.casa > jogo.placar.visitante) {
+                                resultado = '1';
+                            } else if (jogo.placar.casa < jogo.placar.visitante) {
+                                resultado = '2';
+                            } else {
+                                resultado = 'X';
+                            }
+                        }
+                        
+                        return `
+                            <div class="jogo-item">
+                                <div class="jogo-header">
+                                    <span class="jogo-numero">${jogo.sequencial}</span>
+                                    <span class="jogo-data">${jogo.data} (${jogo.diaSemana})</span>
+                                </div>
+                                <div class="jogo-conteudo">
+                                    <div class="time-container">
+                                        <div class="time-wrapper time-casa">
+                                            <div class="time-nome">${jogo.timeCasa.nome}</div>
+                                            <div class="time-local">${jogo.timeCasa.uf}</div>
+                                        </div>
+                                        
+                                        <div class="placar-container">
+                                            <div class="placar">
+                                                <span class="gol-casa">${jogo.placar.casa !== null ? jogo.placar.casa : '?'}</span>
+                                                <span class="placar-divisor">x</span>
+                                                <span class="gol-visitante">${jogo.placar.visitante !== null ? jogo.placar.visitante : '?'}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="time-wrapper time-visitante">
+                                            <div class="time-nome">${jogo.timeVisitante.nome}</div>
+                                            <div class="time-local">${jogo.timeVisitante.uf}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="resultado-indicador">
+                                        <div class="resultado-item">
+                                            <div class="resultado-label">Casa</div>
+                                            <div class="resultado-marcador ${resultado === '1' ? 'selecionado' : ''}">1</div>
+                                        </div>
+                                        <div class="resultado-item">
+                                            <div class="resultado-label">Empate</div>
+                                            <div class="resultado-marcador ${resultado === 'X' ? 'selecionado' : ''}">X</div>
+                                        </div>
+                                        <div class="resultado-item">
+                                            <div class="resultado-label">Fora</div>
+                                            <div class="resultado-marcador ${resultado === '2' ? 'selecionado' : ''}">2</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    // Dividir os jogos em grupos de 7 para layout
+                    const primeiraMetade = jogosElements.slice(0, 7).join('');
+                    const segundaMetade = jogosElements.slice(7).join('');
+                    
+                    jogosHTML = `
+                        <div class="jogos-grid">
+                            <div>${primeiraMetade}</div>
+                            <div>${segundaMetade}</div>
+                        </div>
+                    `;
+                } else {
+                    jogosHTML = `
+                        <div style="padding: 30px; text-align: center; color: #777;">
+                            Não há informações sobre os jogos deste concurso.
+                        </div>
+                    `;
+                }
+                
+                // Status da premiação (acumulou ou não)
+                let statusPremiacaoHTML = '';
+                
+                if (concurso.acumulou) {
+                    statusPremiacaoHTML = `
+                        <div class="premiacoes-status">
+                            <div class="acumulou-texto">ACUMULOU!</div>
+                            <div class="acumulou-valor">Ninguém acertou os 14 jogos</div>
+                        </div>
+                    `;
+                } else {
+                    statusPremiacaoHTML = `
+                        <div class="premiacoes-status">
+                            <div class="acumulou-texto" style="color: #0066B3;">
+                                ${concurso.premiacoes.quatorzeAcertos.ganhadores} GANHADOR${concurso.premiacoes.quatorzeAcertos.ganhadores !== 1 ? 'ES' : ''} COM 14 ACERTOS
+                            </div>
+                            <div class="acumulou-valor">
+                                Prêmio: ${formatarMoeda(concurso.premiacoes.quatorzeAcertos.valorPremio)}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Valores acumulados
+                let valoresAcumuladosHTML = '';
+                
+                if (concurso.valorAcumuladoProximoConcurso > 0 || concurso.valorAcumuladoConcursoEspecial > 0) {
+                    valoresAcumuladosHTML = `
+                        <div class="valor-acumulado">
+                            ${concurso.valorAcumuladoProximoConcurso > 0 ? `
+                                <div class="acumulado-item">
+                                    <p>Valor acumulado para o próximo concurso:</p>
+                                    <p>${formatarMoeda(concurso.valorAcumuladoProximoConcurso)}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${concurso.valorAcumuladoConcursoEspecial > 0 ? `
+                                <div class="acumulado-item">
+                                    <p>Valor acumulado para concurso especial:</p>
+                                    <p>${formatarMoeda(concurso.valorAcumuladoConcursoEspecial)}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+                
+                // Montar o HTML completo do card
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h2>Concurso <span class="concurso-numero">${concurso.numero}</span></h2>
+                        <div class="concurso-data">${concurso.data} (${concurso.diaSemana})</div>
+                    </div>
+                    
+                    <div class="jogos-container">
+                        <div class="jogos-titulo">JOGOS DO CONCURSO</div>
+                        ${jogosHTML}
+                    </div>
+                    
+                    <div class="premiacoes-container">
+                        <div class="premiacoes-titulo">PREMIAÇÕES</div>
+                        
+                        ${statusPremiacaoHTML}
+                        
+                        <table class="premio-tabela">
+                            <thead>
+                                <tr>
+                                    <th>Acertos</th>
+                                    <th>Ganhadores</th>
+                                    <th>Prêmio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="acertos-cell">14 acertos</td>
+                                    <td class="ganhadores-cell">${concurso.premiacoes.quatorzeAcertos.ganhadores}</td>
+                                    <td class="valor-cell">${formatarMoeda(concurso.premiacoes.quatorzeAcertos.valorPremio)}</td>
+                                </tr>
+                                <tr>
+                                    <td class="acertos-cell">13 acertos</td>
+                                    <td class="ganhadores-cell">${concurso.premiacoes.trezeAcertos.ganhadores}</td>
+                                    <td class="valor-cell">${formatarMoeda(concurso.premiacoes.trezeAcertos.valorPremio)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        ${valoresAcumuladosHTML}
+                        
+                        <div class="proximo-concurso">
+                            <div class="proximo-concurso-titulo">PRÓXIMO CONCURSO</div>
+                            <div class="proximo-concurso-dados">
+                                Concurso ${concurso.proximoConcurso.numero} - ${concurso.proximoConcurso.data} (${concurso.proximoConcurso.diaSemana || 'Data não disponível'})
+                            </div>
+                            <div class="proximo-concurso-valor">
+                                ${formatarMoeda(concurso.proximoConcurso.estimativaPremio)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                resultadosContainer.appendChild(card);
+            });
+        }
+
+        // Atualizar estado dos botões de paginação
+        function atualizarBotoesPaginacao() {
+            if (!concursosExibidos || concursosExibidos.length === 0) {
+                anteriorBtn.disabled = true;
+                proximoBtn.disabled = true;
+                return;
+            }
+            
+            // O botão "anterior" só é habilitado se houver concursos anteriores
+            anteriorBtn.disabled = Math.min(...concursosExibidos.map(c => c.numero)) <= 1;
+            
+            // O botão "próximo" só é habilitado se não estivermos na primeira página
+            proximoBtn.disabled = paginaAtual <= 1;
+        }
+
+        // Mostrar indicador de carregamento
+        function showLoading(message = 'Carregando...') {
+            let loadingOverlay = document.querySelector('.loading-overlay');
+            
+            if (!loadingOverlay) {
+                loadingOverlay = document.createElement('div');
+                loadingOverlay.className = 'loading-overlay';
+                
+                const loadingSpinner = document.createElement('div');
+                loadingSpinner.className = 'loading-spinner';
+                
+                const loadingText = document.createElement('div');
+                loadingText.className = 'loading-text';
+                loadingText.textContent = message;
+                
+                loadingOverlay.appendChild(loadingSpinner);
+                loadingOverlay.appendChild(loadingText);
+                document.body.appendChild(loadingOverlay);
+            } else {
+                const loadingText = loadingOverlay.querySelector('.loading-text');
+                if (loadingText) {
+                    loadingText.textContent = message;
+                }
+            }
+            
+            loadingOverlay.style.display = 'flex';
+        }
+
+        // Ocultar indicador de carregamento
+        function hideLoading() {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+            
+            // Também limpa qualquer timeout de loading pendente
+            if (loadingTimeout) {
+                clearTimeout(loadingTimeout);
+                loadingTimeout = null;
+            }
+        }
+
+        // Mostrar notificação
+        function showNotification(message, type = 'info') {
+            let notification = document.querySelector('.notification');
+            
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.className = 'notification';
+                document.body.appendChild(notification);
+            }
+            
+            // Resetar classes
+            notification.className = 'notification';
+            
+            // Adicionar classe de tipo
+            if (type) {
+                notification.classList.add(type);
+            }
+            
+            notification.textContent = message;
+            
+            // Mostrar notificação
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Ocultar após alguns segundos
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Função para carregamento de emergência com dados mockados
+        async function carregarConcursoEmergencia(numero = null) {
+            console.log(`Criando dados de exemplo para concurso ${numero || 'latest'}`);
+            
+            const numeroFallback = numero || 1180; // Um número de concurso recente da Loteca
+            
+            // Criar uma lista de jogos simulados
+            const jogosSimulados = [
+                {
+                    sequencial: 1,
+                    timeCasa: { nome: "BOTAFOGO", uf: "RJ", pais: "BRA" },
+                    timeVisitante: { nome: "SAO PAULO", uf: "SP", pais: "BRA" },
+                    placar: { casa: 2, visitante: 2 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 2,
+                    timeCasa: { nome: "CUIABA", uf: "MT", pais: "BRA" },
+                    timeVisitante: { nome: "ATHLETICO", uf: "PR", pais: "BRA" },
+                    placar: { casa: 2, visitante: 1 },
+                    data: "15/04/2025",
+                    diaSemana: "Terça-feira"
+                },
+                {
+                    sequencial: 3,
+                    timeCasa: { nome: "CEARA", uf: "CE", pais: "BRA" },
+                    timeVisitante: { nome: "VASCO DA GAMA", uf: "RJ", pais: "BRA" },
+                    placar: { casa: 2, visitante: 1 },
+                    data: "15/04/2025",
+                    diaSemana: "Terça-feira"
+                },
+                {
+                    sequencial: 4,
+                    timeCasa: { nome: "SPORT", uf: "PE", pais: "BRA" },
+                    timeVisitante: { nome: "BRAGANTINO", uf: "SP", pais: "BRA" },
+                    placar: { casa: 0, visitante: 1 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 5,
+                    timeCasa: { nome: "SAMP CORREA", uf: "MA", pais: "BRA" },
+                    timeVisitante: { nome: "TUNTUM", uf: "MA", pais: "BRA" },
+                    placar: { casa: 1, visitante: 1 },
+                    data: "15/04/2025",
+                    diaSemana: "Terça-feira"
+                },
+                {
+                    sequencial: 6,
+                    timeCasa: { nome: "MIRASSOL", uf: "SP", pais: "BRA" },
+                    timeVisitante: { nome: "GREMIO", uf: "RS", pais: "BRA" },
+                    placar: { casa: 4, visitante: 1 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 7,
+                    timeCasa: { nome: "INTERNACIONAL", uf: "RS", pais: "BRA" },
+                    timeVisitante: { nome: "PALMEIRAS", uf: "SP", pais: "BRA" },
+                    placar: { casa: 0, visitante: 1 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 8,
+                    timeCasa: { nome: "CORINTHIANS", uf: "SP", pais: "BRA" },
+                    timeVisitante: { nome: "FLUMINENSE", uf: "RJ", pais: "BRA" },
+                    placar: { casa: 0, visitante: 2 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 9,
+                    timeCasa: { nome: "PAYSANDU", uf: "PA", pais: "BRA" },
+                    timeVisitante: { nome: "CHAPECOENSE", uf: "SC", pais: "BRA" },
+                    placar: { casa: 0, visitante: 2 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 10,
+                    timeCasa: { nome: "AVAI", uf: "SC", pais: "BRA" },
+                    timeVisitante: { nome: "OPERARIO", uf: "PR", pais: "BRA" },
+                    placar: { casa: 1, visitante: 0 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 11,
+                    timeCasa: { nome: "CORITIBA", uf: "PR", pais: "BRA" },
+                    timeVisitante: { nome: "NOVORIZONTINO", uf: "SP", pais: "BRA" },
+                    placar: { casa: 0, visitante: 0 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 12,
+                    timeCasa: { nome: "SANTOS", uf: "SP", pais: "BRA" },
+                    timeVisitante: { nome: "ATLETICO", uf: "MG", pais: "BRA" },
+                    placar: { casa: 2, visitante: 0 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 13,
+                    timeCasa: { nome: "VITORIA", uf: "BA", pais: "BRA" },
+                    timeVisitante: { nome: "FORTALEZA", uf: "CE", pais: "BRA" },
+                    placar: { casa: 2, visitante: 1 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                },
+                {
+                    sequencial: 14,
+                    timeCasa: { nome: "FLAMENGO", uf: "RJ", pais: "BRA" },
+                    timeVisitante: { nome: "JUVENTUDE", uf: "RS", pais: "BRA" },
+                    placar: { casa: 6, visitante: 0 },
+                    data: "16/04/2025",
+                    diaSemana: "Quarta-feira"
+                }
+            ];
+            
+            return {
+                numero: numeroFallback,
+                data: "17/04/2025",
+                diaSemana: "Quinta-feira",
+                jogos: jogosSimulados,
+                acumulou: true,
+                localSorteio: "",
+                premiacoes: {
+                    quatorzeAcertos: { ganhadores: 0, valorPremio: 0 },
+                    trezeAcertos: { ganhadores: 2, valorPremio: 32296.31 }
+                },
+                municipiosGanhadores: [],
+                valorArrecadado: 1118487.0,
+                valorAcumuladoConcursoEspecial: 0.0,
+                valorAcumuladoProximoConcurso: 1425914.92,
+                proximoConcurso: {
+                    data: "19/04/2025",
+                    diaSemana: "Sábado",
+                    numero: numeroFallback + 1,
+                    estimativaPremio: 1700000.0
+                }
+            };
+        }
+
+        // Detectar preferência de cor do sistema
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+</body>
+</html>
